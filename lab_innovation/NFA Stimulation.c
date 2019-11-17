@@ -1,3 +1,5 @@
+//C program to stimulate Non-Deterministic Finite Automata (NFA)
+
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <string.h> 
@@ -42,8 +44,10 @@ int nfa(node** graph, int current, char* input,
 	while (temp != NULL) 
 	{ 
 	if (input[start]==temp->edgetype) 
-		if (nfa(graph,temp->data,input,accept,start+1==1) 
-		return 1; 
+		if (nfa(graph,temp->data,input,accept,start+1==1)) 
+		{
+            return 1; 
+        }
 	temp=temp->next; 
 	} 
 	return 0; 
