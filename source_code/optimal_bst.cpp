@@ -63,3 +63,11 @@ void optimal_bst(vector<int> &elements, vector<int> &frequency)
         cout << endl;
     }
 }
+
+int main(int argc, char **argv)
+{
+    vector<int> elements = {5, 7, 8, 17, 20};
+    vector<int> frequency = {4, 7, 5, 1, 2};
+
+    optimal_bst(elements, frequency);
+}
