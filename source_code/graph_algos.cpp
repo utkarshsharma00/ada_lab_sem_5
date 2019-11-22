@@ -135,3 +135,39 @@ void display(vector<vector<Edge>> &graph)
         cout << endl;
     }
 }
+
+bool BFS(vector<vector<Edge>> &graph, int source)
+{
+    priority_queue<Djikstra_Helper, vector<Djikstra_Helper>, greater<Djikstra_Helper>> queue;
+    vector<bool> visited(graph.size(), false);
+
+    queue.push(Djikstra_Helper(source, " " + to_string(source), 0));
+
+    while (queue.size() > 0)
+    {
+        Djikstra_Helper remove = queue.top(); //get front
+        queue.pop();                          //remove front
+
+        if (visited[remove.vertex] == true)
+        {
+            continue;
+        }
+        else
+        {
+            visited[remove.vertex] = true;
+        }
+
+        cout << remove.vertex << " via " << remove.path_so_far << " @ " << remove.distance_so_far << endl;
+
+        for (int neighbour = 0; neighbour < graph[remove.vertex].size(); neighbour++) //add children
+        {
+            Edge new_edge = graph[remove.vertex][neighbour];
+            if (visited[new_edge.neighbour] == false)
+            {
+                Djikstra_Helper nbr = Djikstra_Helper(new_edge.neighbour, remove.path_so_far + to_string(new_edge.neighbour), remove.distance_so_far + new_edge.weight);
+                queue.push(nbr);
+            }
+        }
+    }
+}
+
