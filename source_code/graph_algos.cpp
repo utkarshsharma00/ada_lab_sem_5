@@ -171,3 +171,45 @@ bool BFS(vector<vector<Edge>> &graph, int source)
     }
 }
 
+vector<vector<Edge>> Prims(vector<vector<Edge>> &graph, int source)
+{
+    priority_queue<Prims_Helper, vector<Prims_Helper>, greater<Prims_Helper>> queue;
+    vector<bool> visited(graph.size(), false);
+    vector<vector<Edge>> subgraph(graph.size());
+
+    queue.push(Prims_Helper(source, -1, 0));
+
+    while (queue.size() > 0)
+    {
+        Prims_Helper remove = queue.top(); //get front
+        queue.pop();                       //remove front
+
+        if (visited[remove.vertex] == true)
+        {
+            continue;
+        }
+        else
+        {
+            visited[remove.vertex] = true;
+        }
+
+        if (remove.acquiring_vertex != -1)
+        {
+            addEdge(subgraph, remove.vertex, remove.acquiring_vertex, remove.cost_of_acquiring);
+        }
+
+        for (int neighbour = 0; neighbour < graph[remove.vertex].size(); neighbour++) //add children
+        {
+            Edge new_edge = graph[remove.vertex][neighbour]; //new_edge basically means neighbouring_edge
+            if (visited[new_edge.neighbour] == false)
+            {
+                Prims_Helper nbr = Prims_Helper(new_edge.neighbour, remove.vertex, new_edge.weight);
+                queue.push(nbr);
+            }
+        }
+    }
+
+    return subgraph;
+}
+
+
