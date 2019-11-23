@@ -245,4 +245,53 @@ int find(vector<int> &pointer_array, int vertex) //required for Kruskal's
     }
 }
 
+void floyd_warshall(vector<vector<Edge>> &graph)
+{
+    vector<vector<int>> result = {graph.size(), vector<int>(graph.size(), INT_MAX)};
+
+    for (int i = 0; i < graph.size(); i++)
+    {
+        result[i][i] = 0;
+        for (int neighbour = 0; neighbour < graph[i].size(); neighbour++)
+        {
+            Edge new_edge = graph[i][neighbour];
+            result[i][new_edge.neighbour] = new_edge.weight;
+        }
+    }
+
+    for (int intermediate = 0; intermediate < graph.size(); intermediate++)
+    {
+        for (int source = 0; source < graph.size(); source++)
+        {
+            for (int destination = 0; destination < graph.size(); destination++)
+            {
+                if (intermediate == source || intermediate == destination || source == destination)
+                {
+                    continue;
+                }
+                else if (result[intermediate][destination] == INT_MAX || result[source][intermediate] == INT_MAX)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (result[source][intermediate] + result[intermediate][destination] < result[source][destination])
+                    {
+                        result[source][destination] = result[source][intermediate] + result[intermediate][destination];
+                    }
+                }
+            }
+        }
+    }
+
+    for (int source = 0; source < graph.size(); source++)
+    {
+        for (int destination = 0; destination < graph.size(); destination++)
+        {
+            cout << result[source][destination] << "\t\t";
+        }
+        cout << endl;
+    }
+}
+
 
