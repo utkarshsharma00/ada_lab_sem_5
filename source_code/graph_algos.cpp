@@ -294,6 +294,58 @@ void floyd_warshall(vector<vector<Edge>> &graph)
     }
 }
 
+void bellman(vector<vector<Edge>> &graph, int source)
+{
+    vector<int> result(graph.size(), INT_MAX);
+    vector<Bellman_Helper> all_edges;
+
+    result[source] = 0;
+
+    for (int vertex = 0; vertex < graph.size(); vertex++)
+    {
+        for (int neighbour = 0; neighbour < graph[vertex].size(); neighbour++)
+        {
+            Edge new_edge = graph[vertex][neighbour];
+            Bellman_Helper BE(vertex, new_edge.neighbour, new_edge.weight);
+            all_edges.push_back(BE);
+        }
+    }
+
+    for (int i = 0; i < graph.size() - 1; i++)
+    {
+        for (int j = 0; j < all_edges.size(); j++)
+        {
+            Bellman_Helper BE = all_edges[j];
+            if (result[BE.vertex_1] != INT_MAX)
+            {
+                if (result[BE.vertex_1] + BE.weight < result[BE.vertex_2])
+                {
+                    result[BE.vertex_2] = result[BE.vertex_1] + BE.weight;
+                }
+            }
+        }
+    }
+
+    for (int j = 0; j < all_edges.size(); j++)
+    {
+        Bellman_Helper BE = all_edges[j];
+        if (result[BE.vertex_1] != INT_MAX)
+        {
+            if (result[BE.vertex_1] + BE.weight < result[BE.vertex_2])
+            {
+                cout << "Negative Cycle\n";
+                return;
+            }
+        }
+    }
+
+    for (int i = 0; i < result.size(); i++)
+    {
+        cout << result[i] << " ";
+    }
+    cout << endl;
+}
+
 int main(int argc, char **argv)
 {
     vector<vector<Edge>> graph(7);
